@@ -1,7 +1,7 @@
 package com.miq.caps.utils.notification.verticle
 
 import com.miq.caps.BaseException
-import com.miq.caps.utils.{JsonUtils, ValidationUtils}
+import com.miq.caps.utils.{JsonUtils, ValidationUtils, VertxUtils}
 import com.miq.caps.utils.notification.service.SlackNotificationService
 import com.miq.caps.utils.notification.slack.SlackMessage
 import io.vertx.core.json.JsonObject
@@ -28,23 +28,13 @@ class SlackNotificationVerticle extends ScalaVerticle {
     new SlackNotificationService(client)
   }
 
-  private def handleCompletion[T](r: Message[T], pipeline: Future[String]): Future[Message[String]] = {
-    val result = pipeline.recover {
-      case e: BaseException =>
-        e.printStackTrace()
-        e.statusMessage
-    }
-
-    result.flatMap(response => r.replyFuture[String](response))
-  }
-
   private def publishJsonObjectToWebhookHandler(r: Message[JsonObject]): Future[Message[String]] = {
     val pipeline = for {
       request <- ValidationUtils.validateJsonObjectRequest[SlackMessage](r.body)
       response <- service.publishToWebhook(request)
     } yield JsonUtils.encode(response)
 
-    handleCompletion[JsonObject](r, pipeline)
+    VertxUtils.handleCompletion[JsonObject](r, pipeline)
   }
 
   private def publishStringToWebhookHandler(r: Message[String]): Future[Message[String]] = {
@@ -55,7 +45,7 @@ class SlackNotificationVerticle extends ScalaVerticle {
       response <- service.publishToWebhook(request)
     } yield JsonUtils.encode(response)
 
-    handleCompletion(r, pipeline)
+    VertxUtils.handleCompletion(r, pipeline)
   }
 
   private def simulatePublishJsonObjectToWebhookHandler(r: Message[JsonObject]): Future[Message[String]] = {
@@ -64,7 +54,7 @@ class SlackNotificationVerticle extends ScalaVerticle {
       response <- service.publishToWebhook(request, simulate = true)
     } yield JsonUtils.encode(response)
 
-    handleCompletion[JsonObject](r, pipeline)
+    VertxUtils.handleCompletion[JsonObject](r, pipeline)
   }
 
   private def simulatePublishStringToWebhookHandler(r: Message[String]): Future[Message[String]] = {
@@ -75,7 +65,7 @@ class SlackNotificationVerticle extends ScalaVerticle {
       response <- service.publishToWebhook(request, simulate = true)
     } yield JsonUtils.encode(response)
 
-    handleCompletion(r, pipeline)
+    VertxUtils.handleCompletion(r, pipeline)
   }
 
   override def startFuture(): Future[_] = {
