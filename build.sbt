@@ -6,6 +6,9 @@ version in ThisBuild := "0.1"
 
 scalaVersion in ThisBuild := "2.12.4"
 
+lazy val build = (project in file("."))
+  .aggregate(vertxUtils, parserUtils, commons, core)
+
 lazy val vertxUtils = (project in file("vertx-utils"))
   .settings(
     name := "vertx-utils",
@@ -34,7 +37,7 @@ lazy val core = (project in file("notification-utils-core"))
       ExclusionRule("log4j", "log4j")
     )
   )
-  .dependsOn(commons, vertxUtils, parserUtils)
+  .dependsOn(commons % "test->test;compile->compile", vertxUtils % "test->test;compile->compile", parserUtils % "test->test;compile->compile")
 
 lazy val dependencies = new {
 

@@ -32,7 +32,7 @@ class SlackNotificationSpec extends VertxSpec[SlackNotificationVerticle] with Ma
     Future.successful(Assertions.succeed)
   }
 
-  it should "receive messages and publish to slack" in {
+  ignore should "receive messages and publish to slack" in {
     val test = Prop.forAll(SlackMessageGenerator.genStringMessage) { message =>
       val sender = for {
         response <- vertx.eventBus()
