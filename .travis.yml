@@ -1,0 +1,22 @@
+language: scala
+scala:
+- 2.12.4
+sudo: false
+script:
+- sbt clean coverage test coverageReport && sbt coverageAggregate
+after_success:
+- sbt coveralls
+cache:
+  directories:
+  - "$HOME/.ivy2/cache"
+  - "$HOME/.sbt"
+before_cache:
+- find $HOME/.ivy2/cache -name "ivydata-*.properties" -print -delete
+- find $HOME/.sbt        -name "*.lock"               -print -delete
+notifications:
+  slack:
+    secure: pnzC3U01NxPOZAQt9yznJKdup8ZZdNr6OW3p8dwL9rMfX2pSVrR/YGPc39U4hRiSh0vrI9RJYV2jHnlUjO4+dusyC4MbxGNwaDkheBjcuVPio9jyXwzinLM9QsamGC/v6YIQbS/Dh+hYbBcFEOTnFqGFhEjN2d09/GSQZXHnZaYEeQ1DcC4u8UboFF2mVk1TZxJSEcqHN1WnuvuPgoVi45WUuE3/o6+b/aADc0Z5wE4sCXD3FOdt7QeyKvAgYjFiSSghXME9HKwEqcdyXkuXThG5ThjYwQI800qSBoGYKyMsjs9Pi8Qvg5EZtk0/gBeJRF2Qy82Wz4uLbfRWKiWov6m47SgcFt+gUWaJe5hIcDV/9g18AOPGrdzA5/EEy3+VtBCSD+HX0LjS1Avtp4ccDZwMGK8a2I7Fta2AGXNMP7rhLJy81QMgG0o25yPfwVqWuT7c17jDuxJ2HTReZbrlq0JUbjSG5IYQAy9VHgaQ47+JcQKoLLll8oXPBwS+6LXtmPQBKb2eY5hGFH3cwRSoWc2554YhJelr1dr0mL/xUf7yoyUaCcInbMLaikvE9L1nFs+i1Dcr7rmxnfpV2qasXIprmj4XnRtTD0legLI5M8WZt+LcYGnfYYL/L503nI614BWb8ISSsgFAxQGzwSKAQ9S+ZeSRLeGvoeidycMzjig=
+env:
+  global:
+  - secure: YXu4OaT3QXUtvZQn7pM9OlJAEk0kTMJwzR9zFzK/XBuS3pWBXY458fzzr4UH4Hm56Sl74/vCMLyd3k6yZ6s/7IK207xZ4QMaXGah4hU26hOESD2xQBmc8vAtw5SCvsKvIh0sfJEGIypTH0Xj5TGnDr0f6+m3t/DMLUFTHZ0J2oXoRyiAjic6KFX4NPX+frSebYweYPj/OMLX4PkmGLFOQggPplRBjhP4HhmUYb4ZU6rHmLgyWNPwDzD/stn2Eqd+ePzCQxgVExt5NMSKRQG0IM6s30Neosd/usMX77mTKkpwaWTpAaUS44/BjSxia6Mw0z8bZQg2CK3p2L+6Rr88tOyY9fjBYUKWrybXVC0vUw6M4Y5GY7LVaO238XJvM1qu+sysEBWjJInu/D2Y1TvEf3uVCYG9YLDltpOTmYq/OPlay9rsQ3fwV6xo//GHZ7WG1q+ardh/UOwLASwpuY8lBMcInsDEU4pVVEKPs6A90RtY3RPPqLHsZnn312/kk6gDkk1RjZjbUwtprsSsa2/IvSMRlyKHSeRTUEgNeczisd3ZkRqx8ZhmQSttX3S0yA8n1AjQhWEGPlHqzFeePdS9S514UiSOBpJZvCIpmCBuiWwEd7PYmuCqbySs6D4mY1X+bCNJxB+7ZOnraY4ZQuLTM3Tgt3I2BQj9tDXJra1gfVk=
+  - secure: e//MhTnaeGFITgfqhhOaDwb23CkcmObM5AqYpWvM995vawgtkFCjECePrbCyge+JYwya737XFvnvbYJ6s5FMIpoJkbzjh7FZDHpWu8I2lQtQiU9p9YmD16oKS4LqXxN1t82eCbVxumSIUfcyhTPnmB2CQhpKHFu3YF+Qdebp77hQHVBt5mWvbnccD4Aa9Fmhxn7O7Is51UkFfMHAVvzA9f1K4ITJTEymnZ2THcOixYCNSXnvmL2U0F2I7qsyayo+HMY+UkkPBO+NYefQVlzABdBIc42cFpAqZaagLlZgf4OmnaetHZmcARMiWXBmLfWriFGYBvITsS9kq2QX+Q+rES/QRBzRKV52qcIIf5MctpnviInole9kHoD6NeGYcazvSiAOZolE15E/7QcqjIVbn8YcOrVFdPLrlF9OvDMjsaxDphgSGZDVcCGHGaS//ufy6Tqp2znTfoZASYKSJo2HUzlKkBUU95bfwSxDEhv1P/ONf1sejFelvt+anFkTKHXaGN8FybIf2W9zTA8OueeDEo2Qh7/7kfYzaElKvl3+kc/4rMSWekmiuaV0/YyCeFnrJYSEnk4f4EyYRikswtR/9b9PQYNmYnPw7hjqBlxnIW/WYgRN6cI8LaBCBj3YbMH78b8r8VqDaZUby3M4sSqNa/c5k6+jSvfCjT8wnm4/bHg=

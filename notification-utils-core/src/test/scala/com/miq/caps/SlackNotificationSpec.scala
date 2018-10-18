@@ -43,7 +43,7 @@ class SlackNotificationSpec extends VertxSpec[SlackNotificationVerticle] with Ma
       if (sender.futureValue == ValidResponse) Prop.passed
       else Prop.falsified
     }
-    test.check(_.withMinSuccessfulTests(5))
+    test.check(_.withMinSuccessfulTests(1))
     Future.successful(Assertions.succeed)
   }
 
