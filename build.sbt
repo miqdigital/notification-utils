@@ -31,7 +31,7 @@ lazy val commons = (project in file("notification-utils-commons"))
 lazy val core = (project in file("notification-utils-core"))
   .settings(
     name := "notification-utils-core",
-    libraryDependencies ++= dependencies.test ++ dependencies.vertx ++ dependencies.logging :+ dependencies.config,
+    libraryDependencies ++= dependencies.test ++ dependencies.vertx ++ dependencies.logging :+ dependencies.config :+ dependencies.commonsEmail,
     excludeDependencies ++= Seq(
       ExclusionRule("org.slf4j", "slf4j-log4j12"),
       ExclusionRule("log4j", "log4j")
