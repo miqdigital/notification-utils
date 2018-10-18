@@ -1,17 +1,16 @@
 language: scala
 scala:
-  - 2.12.4
-
-# Use container-based infrastructure
+- 2.12.4
 sudo: false
-
-# These directories are cached to S3 at the end of the build
 cache:
   directories:
-    - $HOME/.ivy2/cache
-    - $HOME/.sbt
-
+  - "$HOME/.ivy2/cache"
+  - "$HOME/.sbt"
 before_cache:
-  # Cleanup the cached directories to avoid unnecessary cache updates
-  - find $HOME/.ivy2/cache -name "ivydata-*.properties" -print -delete
-  - find $HOME/.sbt        -name "*.lock"               -print -delete
+- find $HOME/.ivy2/cache -name "ivydata-*.properties" -print -delete
+- find $HOME/.sbt        -name "*.lock"               -print -delete
+env:
+  secure: aL5NcymApDHILBb9bigL6tzgyfIzB8swGL900asyBwsP9PoTZK8rjh5xxU2YTtN1BTpTr7XOfIMsgpqFk9gwNQTiqL0eFrF6wGX6q9X1t9JA+p5R/RwjHkZh0vFA5txJPlhHWlv5KceO3MdOBg5Q5Ffpz4Vw/zD0b5yjKwwQiGhUzKDJGQtDn+8zQj9NW3qyOdqNJq4DqYfTFaedhq6mgErnUps0zDNSGsS92tuu1aB7rkmc3ZZqSJ601UBSCjhmM8nD+AJpBZ66hIiMS555Fy8wr/9IYnX2hMfAluyVDTSg6TE+w+zjTUqkgLOWj74HpD0bjykq5Ll4yQsMCG2VxP+YHl4mwB3ZKFFluxXhSSVDqYzwPmCkpXj5jdj9zpUu6pOx/snufcQj0eAwUlh3UwWud9JNW/rSX71KD/IoVT7CBVujhAbVjhscgGz0EaTr5Go7yFoAhw1zq9sFpWsasKiM6NQtmFJionw4tdZeaOUzK/nxFlBRR5SRaYl+tDUa4yovYiXEQ1Y3+10pEeYJAf8mHIEFUJvq7+0NOgtdxKclHMcmRamUJxquIQ+sJAN2FCDPoSWxIkoogDm7T/N2cDiiWx6QFJ1BX+yZEzRCsck6590M+/7US69SV/F3qa3U30Mpy4aIinINNGqmkGVJxbAHFcoX3nDM4gNfumI1V4E=
+notifications:
+  slack:
+    secure: pnzC3U01NxPOZAQt9yznJKdup8ZZdNr6OW3p8dwL9rMfX2pSVrR/YGPc39U4hRiSh0vrI9RJYV2jHnlUjO4+dusyC4MbxGNwaDkheBjcuVPio9jyXwzinLM9QsamGC/v6YIQbS/Dh+hYbBcFEOTnFqGFhEjN2d09/GSQZXHnZaYEeQ1DcC4u8UboFF2mVk1TZxJSEcqHN1WnuvuPgoVi45WUuE3/o6+b/aADc0Z5wE4sCXD3FOdt7QeyKvAgYjFiSSghXME9HKwEqcdyXkuXThG5ThjYwQI800qSBoGYKyMsjs9Pi8Qvg5EZtk0/gBeJRF2Qy82Wz4uLbfRWKiWov6m47SgcFt+gUWaJe5hIcDV/9g18AOPGrdzA5/EEy3+VtBCSD+HX0LjS1Avtp4ccDZwMGK8a2I7Fta2AGXNMP7rhLJy81QMgG0o25yPfwVqWuT7c17jDuxJ2HTReZbrlq0JUbjSG5IYQAy9VHgaQ47+JcQKoLLll8oXPBwS+6LXtmPQBKb2eY5hGFH3cwRSoWc2554YhJelr1dr0mL/xUf7yoyUaCcInbMLaikvE9L1nFs+i1Dcr7rmxnfpV2qasXIprmj4XnRtTD0legLI5M8WZt+LcYGnfYYL/L503nI614BWb8ISSsgFAxQGzwSKAQ9S+ZeSRLeGvoeidycMzjig=
