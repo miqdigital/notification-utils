@@ -11,4 +11,6 @@ travis encrypt "<token>" --add notifications.slack
 ```bash
 travis encrypt SLACK_WEBHOOK=<slack-webhook-url> --add env
 travis encrypt COVERALLS_REPO_TOKEN=<coveralls-repo-token> --add env
+travis encrypt SENDER_EMAIL=<sender-email> --add env
+travis encrypt SENDER_EMAIL_TOKEN=<sender-email-token> --add env
 ```
