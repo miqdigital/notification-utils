@@ -1,0 +1,32 @@
+<configuration>
+
+  <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder>
+      <!--Set Time Zone to IST for saner debugging on cloud resources-->
+      <pattern>%date{yyyy-MM-dd HH:mm:ss,IST} [%-4level] [%thread] %msg%n</pattern>
+    </encoder>
+  </appender>
+
+  <appender name="file" class="ch.qos.logback.core.FileAppender">
+    <file>${log-file:-logs/notification-utils.log}</file>
+    <encoder>
+      <!--Set Time Zone to IST for saner debugging on cloud resources-->
+      <pattern>%date{yyyy-MM-dd HH:mm:ss,IST} [%-4level] [%thread] [%class] %msg%n</pattern>
+    </encoder>
+  </appender>
+
+  <!--Setting `additivity` of logger ensures there will be no duplication of log entry to root logger-->
+  <logger name="com.miq.caps" level="TRACE" additivity="false">
+    <appender-ref ref="console"/>
+    <appender-ref ref="file" />
+  </logger>
+
+  <logger name="io.netty" level="warn"/>
+  <logger name="io.vertx" level="info"/>
+
+  <root level="WARN">
+    <appender-ref ref="console"/>
+    <appender-ref ref="file"/>
+  </root>
+
+</configuration>
