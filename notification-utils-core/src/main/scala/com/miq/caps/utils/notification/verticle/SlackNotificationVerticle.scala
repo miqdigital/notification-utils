@@ -45,7 +45,7 @@ class SlackNotificationVerticle extends ScalaVerticle {
       response <- service.publishToWebhook(request)
     } yield JsonUtils.encode(response)
 
-    VertxUtils.handleCompletion(r, pipeline)
+    VertxUtils.handleCompletion[String](r, pipeline)
   }
 
   private def simulatePublishJsonObjectToWebhookHandler(r: Message[JsonObject]): Future[Message[String]] = {
@@ -65,7 +65,7 @@ class SlackNotificationVerticle extends ScalaVerticle {
       response <- service.publishToWebhook(request, simulate = true)
     } yield JsonUtils.encode(response)
 
-    VertxUtils.handleCompletion(r, pipeline)
+    VertxUtils.handleCompletion[String](r, pipeline)
   }
 
   override def startFuture(): Future[_] = {

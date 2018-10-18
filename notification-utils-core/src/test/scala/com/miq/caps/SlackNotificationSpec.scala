@@ -12,7 +12,7 @@ import scala.concurrent.Future
 
 class SlackNotificationSpec extends VertxSpec[SlackNotificationVerticle] with Matchers with ScalaFutures {
 
-  implicit override val patienceConfig: PatienceConfig = PatienceConfig(timeout = Span(5, Seconds), interval = Span(1, Seconds))
+  implicit override val patienceConfig: PatienceConfig = PatienceConfig(timeout = Span(10, Seconds), interval = Span(1, Seconds))
 
   implicit override val generatorDrivenConfig: PropertyCheckConfiguration =
     PropertyCheckConfiguration(minSize = 1, sizeRange = 10, minSuccessful = 5, workers = 1)
