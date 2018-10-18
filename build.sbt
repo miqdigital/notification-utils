@@ -6,6 +6,19 @@ version in ThisBuild := "0.1"
 
 scalaVersion in ThisBuild := "2.12.4"
 
+lazy val vertxUtils = (project in file("vertx-utils"))
+  .settings(
+    name := "vertx-utils",
+    libraryDependencies ++= dependencies.test ++ dependencies.circe ++ dependencies.vertx
+  )
+
+lazy val parserUtils = (project in file("parser-utils"))
+  .settings(
+    name := "parser-utils",
+    libraryDependencies ++= dependencies.test ++ dependencies.circe ++ dependencies.vertx
+  )
+  .dependsOn(vertxUtils)
+
 lazy val commons = (project in file("notification-utils-commons"))
   .settings(
     name := "notification-utils-commons",
@@ -21,7 +34,7 @@ lazy val core = (project in file("notification-utils-core"))
       ExclusionRule("log4j", "log4j")
     )
   )
-  .dependsOn(commons)
+  .dependsOn(commons, vertxUtils, parserUtils)
 
 lazy val dependencies = new {
 
@@ -31,8 +44,8 @@ lazy val dependencies = new {
   private val scalatestVersion = "3.0.0"
   private val scalacheckVersion = "1.14.0"
   val test = Seq(
-    "org.scalatest" %% "scalatest" % scalatestVersion,
-    "org.scalacheck" %% "scalacheck" % scalacheckVersion
+    "org.scalatest" %% "scalatest" % scalatestVersion % Test,
+    "org.scalacheck" %% "scalacheck" % scalacheckVersion % Test
   )
 
   private val vertxVersion = "3.5.0"
