@@ -42,9 +42,11 @@ lazy val core = (project in file("notification-utils-core"))
 lazy val sample = (project in file("sample-service"))
   .settings(
     name := "sample-service",
-    libraryDependencies += dependencies.vertxWeb
+    libraryDependencies ++= Seq(
+      dependencies.vertxWeb,
+      "com.miq.caps" %% "notification-utils" % "0.1"
+    )
   )
-  .dependsOn(commons, core)
 
 lazy val dependencies = new {
 
