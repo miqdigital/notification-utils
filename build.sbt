@@ -39,6 +39,13 @@ lazy val core = (project in file("notification-utils-core"))
   )
   .dependsOn(commons % "test->test;compile->compile", vertxUtils % "test->test;compile->compile", parserUtils % "test->test;compile->compile")
 
+lazy val sample = (project in file("sample-service"))
+  .settings(
+    name := "sample-service",
+    libraryDependencies += dependencies.vertxWeb
+  )
+  .dependsOn(commons, core)
+
 lazy val dependencies = new {
 
   private val configVersion = "1.3.2"
@@ -56,6 +63,7 @@ lazy val dependencies = new {
     "io.vertx" %% "vertx-lang-scala" % vertxVersion,
     "io.vertx" %% "vertx-web-client-scala" % vertxVersion
   )
+  val vertxWeb = "io.vertx" %% "vertx-web-scala" % vertxVersion
 
   private val circeVersion = "0.9.3"
   val circe = Seq(
