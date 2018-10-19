@@ -42,7 +42,7 @@ class EmailNotificationSpec extends VertxSpec[EmailNotificationVerticle] with Ma
     Future.successful(Assertions.succeed)
   }
 
-  it should "generate messages and send Email" in {
+  ignore should "generate messages and send Email" in {
     val test = Prop.forAll(EmailMessageGenerator.genEmailMessage(EmailContext.sender)) { message =>
       val sender = for {
         response <- vertx.eventBus()
@@ -72,7 +72,7 @@ class EmailNotificationSpec extends VertxSpec[EmailNotificationVerticle] with Ma
     Future.successful(Assertions.succeed)
   }
 
-  it should "receive messages and send Email" in {
+  ignore should "receive messages and send Email" in {
     val test = Prop.forAll(EmailMessageGenerator.genEmailMessage(EmailContext.sender)) { message =>
       val sender = for {
         response <- vertx.eventBus()
