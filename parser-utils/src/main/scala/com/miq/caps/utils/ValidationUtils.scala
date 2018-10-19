@@ -26,7 +26,7 @@ object ValidationUtils {
     else Future.successful(s)
   }
 
-  def validateOptionalString(o: Option[String]): Future[String] = o match {
+  def validateOptional[T](o: Option[T]): Future[T] = o match {
     case None => Future.failed(InvalidResponseException)
     case Some(s) => Future.successful(s)
   }
