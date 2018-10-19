@@ -15,7 +15,7 @@ import scala.concurrent.Future
 
 class EmailNotificationSpec extends VertxSpec[EmailNotificationVerticle] with Matchers with ScalaFutures {
 
-  implicit override val patienceConfig: PatienceConfig = PatienceConfig(timeout = Span(10, Seconds), interval = Span(1, Seconds))
+  implicit override val patienceConfig: PatienceConfig = PatienceConfig(timeout = Span(10, Seconds), interval = Span(5, Seconds))
 
   implicit override val generatorDrivenConfig: PropertyCheckConfiguration =
     PropertyCheckConfiguration(minSize = 1, sizeRange = 10, minSuccessful = 5, workers = 1)
@@ -27,7 +27,7 @@ class EmailNotificationSpec extends VertxSpec[EmailNotificationVerticle] with Ma
       .put("text", message.text)
   }
 
-  "EmailNotificationVerticle" should "generate messages and simulate send Email" in {
+  "EmailNotificationVerticle" should "generate string messages and simulate send Email" in {
     val test = Prop.forAll(EmailMessageGenerator.genEmailMessage(EmailContext.sender)) { message =>
       val sender = for {
         response <- vertx.eventBus()
@@ -38,11 +38,26 @@ class EmailNotificationSpec extends VertxSpec[EmailNotificationVerticle] with Ma
       if (sender.futureValue == ValidResponse) Prop.passed
       else Prop.falsified
     }
-    test.check(_.withMinSuccessfulTests(5))
+    test.check(_.withMinSuccessfulTests(3))
     Future.successful(Assertions.succeed)
   }
 
-  ignore should "generate messages and send Email" in {
+  it should "generate string messages and send Email" in {
+    val test = Prop.forAll(EmailMessageGenerator.genEmailMessage(EmailContext.sender)) { message =>
+      val sender = for {
+        response <- vertx.eventBus()
+          .sendFuture[String](EmailNotificationVerticle.EMAIL_STRING_MESSAGE, JsonUtils.encode(message))
+        decoded <- Future.fromTry(JsonUtils.decodeAsTry[ResponseStatus](response.body))
+      } yield decoded
+
+      if (sender.futureValue == ValidResponse) Prop.passed
+      else Prop.falsified
+    }
+    test.check(_.withMinSuccessfulTests(1))
+    Future.successful(Assertions.succeed)
+  }
+
+  it should "generate json object messages and send Email" in {
     val test = Prop.forAll(EmailMessageGenerator.genEmailMessage(EmailContext.sender)) { message =>
       val sender = for {
         response <- vertx.eventBus()
@@ -57,7 +72,7 @@ class EmailNotificationSpec extends VertxSpec[EmailNotificationVerticle] with Ma
     Future.successful(Assertions.succeed)
   }
 
-  it should "simulate receive messages and send Email" in {
+  it should "generate json object messages and simulate send Email" in {
     val test = Prop.forAll(EmailMessageGenerator.genEmailMessage(EmailContext.sender)) { message =>
       val sender = for {
         response <- vertx.eventBus()
@@ -68,23 +83,10 @@ class EmailNotificationSpec extends VertxSpec[EmailNotificationVerticle] with Ma
       if (sender.futureValue == ValidResponse) Prop.passed
       else Prop.falsified
     }
-    test.check(_.withMinSuccessfulTests(5))
+    test.check(_.withMinSuccessfulTests(3))
     Future.successful(Assertions.succeed)
   }
 
-  ignore should "receive messages and send Email" in {
-    val test = Prop.forAll(EmailMessageGenerator.genEmailMessage(EmailContext.sender)) { message =>
-      val sender = for {
-        response <- vertx.eventBus()
-          .sendFuture[String](EmailNotificationVerticle.EMAIL_STRING_MESSAGE, JsonUtils.encode(message))
-        decoded <- Future.fromTry(JsonUtils.decodeAsTry[ResponseStatus](response.body))
-      } yield decoded
 
-      if (sender.futureValue == ValidResponse) Prop.passed
-      else Prop.falsified
-    }
-    test.check(_.withMinSuccessfulTests(1))
-    Future.successful(Assertions.succeed)
-  }
 
 }

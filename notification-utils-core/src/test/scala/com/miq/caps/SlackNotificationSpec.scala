@@ -5,7 +5,6 @@ import com.miq.caps.utils.JsonUtils
 import com.miq.caps.utils.notification.context.SlackContext
 import com.miq.caps.utils.notification.slack.SlackBotMessage
 import com.miq.caps.utils.notification.verticle.SlackNotificationVerticle
-import io.vertx.core.json.JsonObject
 import org.scalacheck.Prop
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.time.{Seconds, Span}
@@ -15,7 +14,7 @@ import scala.concurrent.Future
 
 class SlackNotificationSpec extends VertxSpec[SlackNotificationVerticle] with Matchers with ScalaFutures {
 
-  implicit override val patienceConfig: PatienceConfig = PatienceConfig(timeout = Span(10, Seconds))//, interval = Span(1, Seconds))
+  implicit override val patienceConfig: PatienceConfig = PatienceConfig(timeout = Span(10, Seconds), interval = Span(5, Seconds))
 
   implicit override val generatorDrivenConfig: PropertyCheckConfiguration =
     PropertyCheckConfiguration(minSize = 1, sizeRange = 10, minSuccessful = 5, workers = 1)
@@ -31,11 +30,11 @@ class SlackNotificationSpec extends VertxSpec[SlackNotificationVerticle] with Ma
       if (sender.futureValue == ValidResponse) Prop.passed
       else Prop.falsified
     }
-    test.check(_.withMinSuccessfulTests(5))
+    test.check(_.withMinSuccessfulTests(3))
     Future.successful(Assertions.succeed)
   }
 
-  ignore should "generate string messages and publish to slack" in {
+  it should "generate string messages and publish to slack" in {
     val test = Prop.forAll(SlackMessageGenerator.genNonEmptyString) { message =>
       val sender = for {
         response <- vertx.eventBus()
@@ -50,7 +49,7 @@ class SlackNotificationSpec extends VertxSpec[SlackNotificationVerticle] with Ma
     Future.successful(Assertions.succeed)
   }
 
-  ignore should "simulate json object messages and simulate publish to slack" in {
+  it should "simulate json object messages and simulate publish to slack" in {
     val test = Prop.forAll(SlackMessageGenerator.genSlackMessage) { message =>
       val sender = for {
         response <- vertx.eventBus()
@@ -61,11 +60,11 @@ class SlackNotificationSpec extends VertxSpec[SlackNotificationVerticle] with Ma
       if (sender.futureValue == ValidResponse) Prop.passed
       else Prop.falsified
     }
-    test.check(_.withMinSuccessfulTests(5))
+    test.check(_.withMinSuccessfulTests(3))
     Future.successful(Assertions.succeed)
   }
 
-  ignore should "generate json object messages and publish to slack" in {
+  it should "generate json object messages and publish to slack" in {
     val test = Prop.forAll(SlackMessageGenerator.genSlackMessage) { message =>
       val sender = for {
         response <- vertx.eventBus()
@@ -80,7 +79,7 @@ class SlackNotificationSpec extends VertxSpec[SlackNotificationVerticle] with Ma
     Future.successful(Assertions.succeed)
   }
 
-  ignore should "generate bot json object messages and simulate publish to slack user" in {
+  it should "generate bot json object messages and simulate publish to slack user" in {
     val test = Prop.forAll(SlackMessageGenerator.genSlackUserBotMessage) { message =>
       val sender = for {
         response <- vertx.eventBus()
@@ -91,7 +90,7 @@ class SlackNotificationSpec extends VertxSpec[SlackNotificationVerticle] with Ma
       if (sender.futureValue == ValidResponse) Prop.passed
       else Prop.falsified
     }
-    test.check(_.withMinSuccessfulTests(5))
+    test.check(_.withMinSuccessfulTests(3))
     Future.successful(Assertions.succeed)
   }
 
@@ -111,7 +110,7 @@ class SlackNotificationSpec extends VertxSpec[SlackNotificationVerticle] with Ma
     Future.successful(Assertions.succeed)
   }
 
-  ignore should "generate bot json object messages and simulate publish to slack id" in {
+  it should "generate bot json object messages and simulate publish to slack id" in {
     val test = Prop.forAll(SlackMessageGenerator.genSlackIdBotMessage) { message =>
       val sender = for {
         response <- vertx.eventBus()
@@ -122,7 +121,7 @@ class SlackNotificationSpec extends VertxSpec[SlackNotificationVerticle] with Ma
       if (sender.futureValue == ValidResponse) Prop.passed
       else Prop.falsified
     }
-    test.check(_.withMinSuccessfulTests(5))
+    test.check(_.withMinSuccessfulTests(3))
     Future.successful(Assertions.succeed)
   }
 
