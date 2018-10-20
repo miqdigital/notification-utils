@@ -20,6 +20,7 @@ travis encrypt "<token>" --add notifications.slack
 ##### Encrypting environment variables
 ```bash
 travis encrypt COVERALLS_REPO_TOKEN=<coveralls-repo-token> --add env
+travis encrypt CODACY_PROJECT_TOKEN=<codacy-project-token> --add env
 
 travis encrypt SLACK_WEBHOOK=<slack-webhook-url> --add env
 travis encrypt SLACK_BOT_TOKEN=<slack-bot-token> --add env
