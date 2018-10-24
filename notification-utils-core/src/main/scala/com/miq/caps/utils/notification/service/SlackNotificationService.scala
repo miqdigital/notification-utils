@@ -1,12 +1,12 @@
 package com.miq.caps.utils.notification.service
 
-import com.miq.caps.utils.ValidationUtils
+import com.miq.caps.utils.{JsonUtils, ValidationUtils}
 import com.miq.caps.utils.notification.api.SlackNotificationApi
 import com.miq.caps.utils.notification.context.SlackContext
 import com.miq.caps.utils.notification.slack.SlackBotMessage
 import com.miq.caps.{ResponseStatus, ValidResponse}
 import com.typesafe.scalalogging.LazyLogging
-import io.vertx.core.json.JsonObject
+import io.vertx.core.json.{JsonArray, JsonObject}
 import io.vertx.lang.scala.VertxExecutionContext
 import io.vertx.scala.ext.web.client.WebClient
 
@@ -32,9 +32,11 @@ class SlackNotificationService(client: WebClient)(implicit ec: VertxExecutionCon
   }
 
   private def generateSlackMessage(message: SlackBotMessage, id: String): JsonObject = {
+    val attachments = message.message.attachments.foldLeft(new JsonArray())((a, b) => a.add(JsonUtils.encodeAsJsonObject(b)))
     new JsonObject()
       .put("channel", id)
       .put("text", message.message.text)
+      .put("attachments", attachments)
   }
 
   private def getSlackIdByEmail(email: String): Future[String] = {
