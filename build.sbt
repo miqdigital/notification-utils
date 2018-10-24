@@ -7,6 +7,13 @@ version in ThisBuild := "0.1"
 scalaVersion in ThisBuild := "2.12.4"
 
 lazy val build = (project in file("."))
+  .settings(
+
+    // ensures minimum coverage for package to be built
+    coverageMinimum := 80,
+    coverageFailOnMinimum := true
+
+  )
   .aggregate(vertxUtils, parserUtils, commons, core)
 
 lazy val vertxUtils = (project in file("vertx-utils"))
@@ -110,9 +117,5 @@ lazy val commonSettings = Seq(
   scalacOptions ++= compilerOptions,
   fork in run := true,
 
-  publishArtifact in Test := true,
-
-  // ensures minimum coverage for package to be built
-  coverageMinimum := 80,
-  coverageFailOnMinimum := true
+  publishArtifact in Test := true
 )
