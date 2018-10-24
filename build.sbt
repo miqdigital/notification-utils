@@ -12,12 +12,14 @@ lazy val build = (project in file("."))
 lazy val vertxUtils = (project in file("vertx-utils"))
   .settings(
     name := "vertx-utils",
+    commonSettings,
     libraryDependencies ++= dependencies.test ++ dependencies.circe ++ dependencies.vertx
   )
 
 lazy val parserUtils = (project in file("parser-utils"))
   .settings(
     name := "parser-utils",
+    commonSettings,
     libraryDependencies ++= dependencies.test ++ dependencies.circe ++ dependencies.vertx
   )
   .dependsOn(vertxUtils)
@@ -25,12 +27,14 @@ lazy val parserUtils = (project in file("parser-utils"))
 lazy val commons = (project in file("notification-utils-commons"))
   .settings(
     name := "notification-utils-commons",
+    commonSettings,
     libraryDependencies ++= dependencies.test ++ dependencies.circe :+ dependencies.st4
   )
 
 lazy val core = (project in file("notification-utils-core"))
   .settings(
     name := "notification-utils-core",
+    commonSettings,
     libraryDependencies ++= dependencies.test ++ dependencies.vertx ++ dependencies.logging :+ dependencies.config :+ dependencies.commonsEmail,
     excludeDependencies ++= Seq(
       ExclusionRule("org.slf4j", "slf4j-log4j12"),
@@ -44,7 +48,7 @@ lazy val sample = (project in file("sample-service"))
     name := "sample-service",
     libraryDependencies ++= Seq(
       dependencies.vertxWeb,
-      "com.miq.caps" %% "notification-utils" % "0.1"
+      "com.miq.caps" %% "notification-utils-core" % "0.1"
     )
   )
 
@@ -89,3 +93,26 @@ lazy val dependencies = new {
   val st4 = "org.antlr" % "ST4" % st4Version
 
 }
+
+lazy val compilerOptions = Seq(
+  "-unchecked",
+  "-feature",
+  "-language:existentials",
+  "-language:higherKinds",
+  "-language:implicitConversions",
+  "-language:postfixOps",
+  "-deprecation",
+  "-encoding",
+  "utf8"
+)
+
+lazy val commonSettings = Seq(
+  scalacOptions ++= compilerOptions,
+  fork in run := true,
+
+  publishArtifact in Test := true,
+
+  // ensures minimum coverage for package to be built
+  coverageMinimum := 80,
+  coverageFailOnMinimum := true
+)

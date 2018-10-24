@@ -1,7 +1,7 @@
 package com.miq.caps
 
 import com.miq.caps.utils.{JsonUtils, ValidationUtils}
-import com.miq.caps.utils.notification.slack.{SlackBotMessage, SlackMessage}
+import com.miq.caps.utils.notification.slack.{Action, Attachment, SlackBotMessage, SlackMessage}
 import com.miq.caps.utils.notification.verticle.SlackNotificationVerticle
 import io.vertx.lang.scala.ScalaVerticle
 import io.vertx.scala.core.http.HttpServer
@@ -22,7 +22,7 @@ class RestVerticle extends ScalaVerticle {
   private def handlePing(r: RoutingContext) = {
     val pipeline = for {
       email <- ValidationUtils.validateOptional(r.queryParams().get("email"))
-      message = SlackBotMessage(email, SlackMessage(RestVerticle.PING_MESSAGE))
+      message = SlackBotMessage(email, SlackMessage(RestVerticle.PING_MESSAGE, Seq(Attachment(text = Some("dummy"), attachmentType = Some("default"), actions = Seq(Action("terminate", "dum", "button", "yes"))))))
       sendSlackMessage <- vertx.eventBus().sendFuture[String](SlackNotificationVerticle.PUBLISH_JSON_OBJECT_TO_SLACK_USER, JsonUtils.encodeAsJsonObject(message))
       responseStatus <- Future.fromTry(JsonUtils.decodeAsTry[ResponseStatus](sendSlackMessage.body))
     } yield JsonUtils.encode(responseStatus)
